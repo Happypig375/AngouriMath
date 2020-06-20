@@ -1,8 +1,8 @@
-name: Test
+name: Build-Test
 
 on: [push, pull_request]
 jobs:
-  Unit_test:
+  build-test:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -19,6 +19,8 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: '8'
+    - name: Build
+      run: dotnet build
     - name: Test
       run: |
         dotnet add "Tests/UnitTests" package Microsoft.NET.Test.Sdk # Update is required for GitHubActionsTestLogger to print anything
