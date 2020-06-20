@@ -2,7 +2,23 @@ name: Build-Test
 
 on: [push, pull_request]
 jobs:
-  build-test:
+  build:
+    runs-on: windows-latest
+    steps:
+     - uses: actions/checkout@v2
+       with:
+         submodules: 'recursive'
+     - name: Setup .NET Core
+       uses: actions/setup-dotnet@v1
+       with:
+         dotnet-version: '3.1.201'
+     - name: Setup JDK # Needed to run ANTLR
+       uses: actions/setup-java@v1
+       with:
+         java-version: '8'
+     - name: Build
+       run: dotnet build
+  test:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -19,8 +35,6 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: '8'
-    - name: Build
-      run: dotnet build
     - name: Test
       run: |
         dotnet add "Tests/UnitTests" package Microsoft.NET.Test.Sdk # Update is required for GitHubActionsTestLogger to print anything
