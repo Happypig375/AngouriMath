@@ -25,7 +25,7 @@ namespace UnitTests.PatternsTest
                 var expandOver = TreeAnalyzer.SmartExpandOver(expr, entity => entity.SubtreeIsFound("x"));
                 if (expandOver is null)
                     throw new AssertFailedException("expandOver is null");
-                return TreeAnalyzer.MultiHangBinary(expandOver, "sumf", Const.PRIOR_SUM);
+                return TreeAnalyzer.MultiHangBinary(expandOver, "sumf", Const.Priority.Sum);
             });
             foreach (var toSub in toSubs)
             {

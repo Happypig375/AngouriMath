@@ -28,7 +28,7 @@ namespace AngouriMath
 {
     using LatexTable = Dictionary<string, Func<List<Entity>, string>>;
 
-    public abstract partial class Entity : ILatexiseable
+    public abstract partial record Entity : ILatexiseable
     {
         /// <summary>
         /// Returns the expression in format of latex (for example, a / b -> \frac{a}{b})
@@ -44,7 +44,7 @@ namespace AngouriMath
                     Tensor t => t.Latexise(),
                     // If parentheses are required, they might be only required when complicated numbers are wrapped,
                     // such as fractions and complex but not a single i
-                    NumberEntity { Value:var value } => value.Latexise(Priority != Const.PRIOR_NUM && parenthesesRequired),
+                    NumberEntity { Value:var value } => value.Latexise(Priority != Const.Priority.Num && parenthesesRequired),
                     _ => throw new Core.Exceptions.UnknownEntityException()
                 };
             else
@@ -88,8 +88,8 @@ namespace AngouriMath
         internal static string Latex(List<Entity> args)
         {
             MathFunctions.AssertArgs(args.Count, 2);
-            var arg1latex = args[1].Latexise(args[1].Priority < Const.PRIOR_SUM);
-            return args[0].Latexise(args[0].Priority < Const.PRIOR_SUM) +
+            var arg1latex = args[1].Latexise(args[1].Priority < Const.Priority.Sum);
+            return args[0].Latexise(args[0].Priority < Const.Priority.Sum) +
                 (arg1latex.StartsWith("-") ? arg1latex : "+" + arg1latex);
         }
     }
@@ -98,7 +98,7 @@ namespace AngouriMath
         internal static string Latex(List<Entity> args)
         {
             MathFunctions.AssertArgs(args.Count, 2);
-            return args[0].Latexise(args[0].Priority < Const.PRIOR_MINUS) + "-" + args[1].Latexise(args[1].Priority <= Const.PRIOR_MINUS);
+            return args[0].Latexise(args[0].Priority < Const.Priority.Minus) + "-" + args[1].Latexise(args[1].Priority <= Const.Priority.Minus);
         }
     }
     internal static partial class Mulf
@@ -107,9 +107,9 @@ namespace AngouriMath
         {
             MathFunctions.AssertArgs(args.Count, 2);
             if (args[0] == -1)
-                return "-" + args[1].Latexise(args[1].Priority < Const.PRIOR_MUL);
+                return "-" + args[1].Latexise(args[1].Priority < Const.Priority.Mul);
             else
-                return args[0].Latexise(args[0].Priority < Const.PRIOR_MUL) + @"\times " + args[1].Latexise(args[1].Priority < Const.PRIOR_MUL);
+                return args[0].Latexise(args[0].Priority < Const.Priority.Mul) + @"\times " + args[1].Latexise(args[1].Priority < Const.Priority.Mul);
         }
     }
     internal static partial class Divf
@@ -184,7 +184,7 @@ namespace AngouriMath
             }
             else
             {
-                return "{" + args[0].Latexise(args[0].Priority <= Const.PRIOR_POW) + "}^{" + args[1].Latexise() + "}";
+                return "{" + args[0].Latexise(args[0].Priority <= Const.Priority.Pow) + "}^{" + args[1].Latexise() + "}";
             }
         }
     }
@@ -226,7 +226,7 @@ namespace AngouriMath
         internal static string Latex(List<Entity> args)
         {
             MathFunctions.AssertArgs(args.Count, 1);
-            return args[0].Latexise(args[0].Priority < Const.PRIOR_NUM) + "!";
+            return args[0].Latexise(args[0].Priority < Const.Priority.Num) + "!";
         }
     }
 
@@ -314,10 +314,10 @@ namespace AngouriMath
                 return "Error";
 
             sb.Append("} ");
-            if (args[0].Priority < Const.PRIOR_POW)
+            if (args[0].Priority < Const.Priority.Pow)
                 sb.Append(@"\left[");
             sb.Append(args[0].Latexise(false));
-            if (args[0].Priority < Const.PRIOR_POW)
+            if (args[0].Priority < Const.Priority.Pow)
                 sb.Append(@"\right]");
 
             return sb.ToString();

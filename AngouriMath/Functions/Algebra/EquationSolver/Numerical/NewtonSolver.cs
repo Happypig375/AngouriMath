@@ -138,7 +138,7 @@ namespace AngouriMath
         }
     }
 
-    public abstract partial class Entity : ILatexiseable
+    public abstract partial record Entity : ILatexiseable
     {
         /// <summary>
         /// Searches for numerical solutions via Newton's method https://en.wikipedia.org/wiki/Newton%27s_method

@@ -30,14 +30,17 @@ namespace AngouriMath
     /// </summary>
     public static partial class Const
     {
-        internal static readonly int PRIOR_SUM = 2;
-        internal static readonly int PRIOR_MINUS = 2;
-        internal static readonly int PRIOR_MUL = 4;
-        internal static readonly int PRIOR_DIV = 4;
-        internal static readonly int PRIOR_POW = 6;
-        internal static readonly int PRIOR_FUNC = 8;
-        internal static readonly int PRIOR_VAR = 10;
-        internal static readonly int PRIOR_NUM = 10;
+        public enum Priority
+        {
+            Sum = 2,
+            Minus = 2,
+            Mul = 4,
+            Div = 4,
+            Pow = 6,
+            Func = 8,
+            Var = 10,
+            Num = 10,
+        }
         internal static readonly string ARGUMENT_DELIMITER = ",";
 
         /// <summary>
@@ -47,7 +50,7 @@ namespace AngouriMath
         /// <returns></returns>
         internal static OperatorEntity FuncIfSum(Entity child)
         {
-            var res = new OperatorEntity("mulf", Const.PRIOR_MUL);
+            var res = new OperatorEntity("mulf", Const.Priority.Mul);
             res.AddChild(-1);
             res.AddChild(child);
             return res;
@@ -60,7 +63,7 @@ namespace AngouriMath
         /// <returns></returns>
         internal static OperatorEntity FuncIfMul(Entity child)
         {
-            var res = new OperatorEntity("powf", Const.PRIOR_POW);
+            var res = new OperatorEntity("powf", Const.Priority.Pow);
             res.AddChild(child);
             res.AddChild(-1);
             return res;

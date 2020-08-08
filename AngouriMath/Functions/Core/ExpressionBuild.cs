@@ -28,7 +28,7 @@ namespace AngouriMath
     {
         public static Entity Hang(Entity a, Entity b)
         {
-            var res = new OperatorEntity("sumf", Const.PRIOR_SUM);
+            var res = new OperatorEntity("sumf", Const.Priority.Sum);
             res.AddChild(a);
             res.AddChild(b);
             return res;
@@ -39,7 +39,7 @@ namespace AngouriMath
     {
         public static Entity Hang(Entity a, Entity b)
         {
-            var res = new OperatorEntity("minusf", Const.PRIOR_MINUS);
+            var res = new OperatorEntity("minusf", Const.Priority.Minus);
             res.AddChild(a);
             res.AddChild(b);
             return res;
@@ -50,7 +50,7 @@ namespace AngouriMath
     {
         public static Entity Hang(Entity a, Entity b)
         {
-            var res = new OperatorEntity("mulf", Const.PRIOR_MUL);
+            var res = new OperatorEntity("mulf", Const.Priority.Mul);
             res.AddChild(a);
             res.AddChild(b);
             return res;
@@ -60,7 +60,7 @@ namespace AngouriMath
     {
         public static Entity Hang(Entity a, Entity b)
         {
-            var res = new OperatorEntity("divf", Const.PRIOR_DIV);
+            var res = new OperatorEntity("divf", Const.Priority.Div);
             res.AddChild(a);
             res.AddChild(b);
             return res;
@@ -70,7 +70,7 @@ namespace AngouriMath
     {
         public static Entity Hang(Entity a, Entity b)
         {
-            var res = new OperatorEntity("powf", Const.PRIOR_POW);
+            var res = new OperatorEntity("powf", Const.Priority.Pow);
             res.AddChild(a);
             res.AddChild(b);
             return res;

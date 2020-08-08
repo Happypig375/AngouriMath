@@ -22,7 +22,7 @@ using PeterO.Numbers;
 
 namespace AngouriMath
 {
-    public abstract partial class Entity : ILatexiseable
+    public abstract partial record Entity : ILatexiseable
     {
         /// <summary>
         /// Returns a value of a definite integral of a function. Only works for one-variable functions

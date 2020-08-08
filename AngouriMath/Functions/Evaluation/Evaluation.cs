@@ -69,7 +69,7 @@ namespace AngouriMath
     using EvalTable = Dictionary<string, Func<List<Entity>, Entity>>;
 
     // Adding function Eval to Entity
-    public abstract partial class Entity : ILatexiseable
+    public abstract partial record Entity : ILatexiseable
     {
         const int DefaultLevel = 2;
         /// <summary>
@@ -98,7 +98,7 @@ namespace AngouriMath
                 else
                     return this; // if one is too complicated, return the current one
             }
-            var expanded = TreeAnalyzer.MultiHangBinary(expChildren, "sumf", Const.PRIOR_SUM);
+            var expanded = TreeAnalyzer.MultiHangBinary(expChildren, "sumf", Const.Priority.Sum);
             return Expand_(expanded, level).InnerSimplify();
         }
 

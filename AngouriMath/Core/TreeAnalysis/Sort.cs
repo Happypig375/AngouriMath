@@ -24,7 +24,7 @@ using System.Linq;
 namespace AngouriMath
 {
     using SortLevel = TreeAnalyzer.SortLevel;
-    public abstract partial class Entity : ILatexiseable
+    public abstract partial record Entity : ILatexiseable
     {
         /// <summary>
         /// Hash that is convenient to sort with
@@ -161,8 +161,8 @@ namespace AngouriMath.Core.TreeAnalysis
             var grouppedChildren = new List<Entity>();
             foreach (var list in groups)
                 grouppedChildren.Add(TreeAnalyzer.MultiHangLinear(list,
-                    isSum ? "sumf" : "mulf", isSum ? Const.PRIOR_SUM : Const.PRIOR_MUL));
-            tree = TreeAnalyzer.MultiHangLinear(grouppedChildren, isSum ? "sumf" : "mulf", isSum ? Const.PRIOR_SUM : Const.PRIOR_MUL);
+                    isSum ? "sumf" : "mulf", isSum ? Const.Priority.Sum : Const.Priority.Mul));
+            tree = TreeAnalyzer.MultiHangLinear(grouppedChildren, isSum ? "sumf" : "mulf", isSum ? Const.Priority.Sum : Const.Priority.Mul);
         }
     }
 }

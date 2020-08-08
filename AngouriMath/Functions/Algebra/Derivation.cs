@@ -25,7 +25,7 @@ namespace AngouriMath
     using DeriveTable = Dictionary<string, Func<List<Entity>, VariableEntity, Entity>>;
 
     // Adding function Derive to Entity
-    public abstract partial class Entity : ILatexiseable
+    public abstract partial record Entity : ILatexiseable
     {
         /// <summary>
         /// Derives over x power times

@@ -27,7 +27,7 @@ namespace AngouriMath
 {
     using StringTable = Dictionary<string, Func<List<Entity>, string>>;
 
-    public abstract partial class Entity : ILatexiseable
+    public abstract partial record Entity : ILatexiseable
     {
         /// <summary>
         /// An expression into a string
@@ -50,7 +50,7 @@ namespace AngouriMath
                     VariableEntity _ => this.Name,
                     // If parentheses are required, they might be only required when complicated numbers are wrapped,
                     // such as fractions and complex but not a single i
-                    NumberEntity n => n.Value.ToString(Priority != Const.PRIOR_NUM && parenthesesRequired),
+                    NumberEntity n => n.Value.ToString(Priority != Const.Priority.Num && parenthesesRequired),
                     _ => throw new UnknownEntityException()
                 };
             else
@@ -73,7 +73,7 @@ namespace AngouriMath
         public static string Stringize(List<Entity> args)
         {
             MathFunctions.AssertArgs(args.Count, 2);
-            return args[0].Stringize(args[0].Priority < Const.PRIOR_SUM) + " + " + args[1].Stringize(args[1].Priority < Const.PRIOR_SUM);
+            return args[0].Stringize(args[0].Priority < Const.Priority.Sum) + " + " + args[1].Stringize(args[1].Priority < Const.Priority.Sum);
         }
     }
     internal static partial class Minusf
@@ -81,7 +81,7 @@ namespace AngouriMath
         public static string Stringize(List<Entity> args)
         {
             MathFunctions.AssertArgs(args.Count, 2);
-            return args[0].Stringize(args[0].Priority < Const.PRIOR_MINUS) + " - " + args[1].Stringize(args[1].Priority <= Const.PRIOR_MINUS);
+            return args[0].Stringize(args[0].Priority < Const.Priority.Minus) + " - " + args[1].Stringize(args[1].Priority <= Const.Priority.Minus);
         }
     }
     internal static partial class Mulf
@@ -89,7 +89,7 @@ namespace AngouriMath
         public static string Stringize(List<Entity> args)
         {
             MathFunctions.AssertArgs(args.Count, 2);
-            return args[0].Stringize(args[0].Priority < Const.PRIOR_MUL) + " * " + args[1].Stringize(args[1].Priority < Const.PRIOR_MUL);
+            return args[0].Stringize(args[0].Priority < Const.Priority.Mul) + " * " + args[1].Stringize(args[1].Priority < Const.Priority.Mul);
         }
     }
     internal static partial class Divf
@@ -97,7 +97,7 @@ namespace AngouriMath
         public static string Stringize(List<Entity> args)
         {
             MathFunctions.AssertArgs(args.Count, 2);
-            return args[0].Stringize(args[0].Priority < Const.PRIOR_DIV) + " / " + args[1].Stringize(args[1] is OperatorEntity && args[1].Priority <= Const.PRIOR_DIV);
+            return args[0].Stringize(args[0].Priority < Const.Priority.Div) + " / " + args[1].Stringize(args[1] is OperatorEntity && args[1].Priority <= Const.Priority.Div);
         }
     }
     internal static partial class Sinf
@@ -151,7 +151,7 @@ namespace AngouriMath
             }
             else
             {
-                return args[0].Stringize(args[0].Priority < Const.PRIOR_POW) + " ^ " + args[1].Stringize(args[1].Priority < Const.PRIOR_POW);
+                return args[0].Stringize(args[0].Priority < Const.Priority.Pow) + " ^ " + args[1].Stringize(args[1].Priority < Const.Priority.Pow);
             }
         }
     }
@@ -193,7 +193,7 @@ namespace AngouriMath
         public static string Stringize(List<Entity> args)
         {
             MathFunctions.AssertArgs(args.Count, 1);
-            return args[0].Stringize(args[0].Priority < Const.PRIOR_NUM) + "!";
+            return args[0].Stringize(args[0].Priority < Const.Priority.Num) + "!";
         }
     }
 

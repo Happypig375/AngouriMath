@@ -102,7 +102,7 @@ namespace AngouriMath.Core.TreeAnalysis
 
 namespace AngouriMath
 {
-    public abstract partial class Entity : ILatexiseable
+    public abstract partial record Entity : ILatexiseable
     {
         /// <summary>
         /// Checks whether a subtree can be found in a tree

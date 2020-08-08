@@ -29,7 +29,7 @@ using AngouriMath.Functions.Algebra.Solver.Analytical;
 
 namespace AngouriMath
 {
-    public abstract partial class Entity : ILatexiseable
+    public abstract partial record Entity : ILatexiseable
     {
         /// <summary>
         /// Attempt to find analytical roots of a custom equation

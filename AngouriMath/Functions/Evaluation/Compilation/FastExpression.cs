@@ -26,7 +26,7 @@ using System.Text;
 
 namespace AngouriMath
 {
-    public abstract partial class Entity : ILatexiseable
+    public abstract partial record Entity : ILatexiseable
     {
         /// <summary>
         /// Compile function so you can evaluate numerical value 15x faster,
@@ -54,7 +54,7 @@ namespace AngouriMath
 
 namespace AngouriMath
 {
-    public abstract partial class Entity : ILatexiseable
+    public abstract partial record Entity : ILatexiseable
     {
         /// <summary>
         /// Returns number of nodes in tree

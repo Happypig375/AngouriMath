@@ -18,7 +18,7 @@ using AngouriMath.Core.Sys.Interfaces;
 
 namespace AngouriMath
 {
-    public abstract partial class Entity : ILatexiseable
+    public abstract partial record Entity : ILatexiseable
     {
         /// <summary>
         /// Substitute a variable with an expression

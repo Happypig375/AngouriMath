@@ -27,7 +27,7 @@ using System.Linq;
 
 namespace AngouriMath
 {
-    public abstract partial class Entity : ILatexiseable
+    public abstract partial record Entity : ILatexiseable
     {
         internal enum PatType
         {

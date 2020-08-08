@@ -29,52 +29,8 @@ namespace AngouriMath
     /// Every node, expression, or number is an Entity
     /// However, you cannot create an instance of this class
     /// </summary>
-    public abstract partial class Entity : ILatexiseable, System.IEquatable<Entity>
+    public abstract partial record Entity : ILatexiseable
     {
-        protected abstract Entity __copy();
-        protected abstract bool EqualsTo(Entity obj);
-        internal abstract void Check();
-        
-        public readonly string Name = string.Empty;
-
-        /// <summary>
-        /// Usually IsLeaf <=> number, variable, tensor
-        /// </summary>
-        public bool IsLeaf => Children.Count == 0;
-        protected Entity(string name)
-        {
-            Children = new List<Entity>();
-            Name = name;
-            PropsReinit();
-        }
-
-        /// <summary>
-        /// All children nodes of an expression
-        /// </summary>
-        internal List<Entity> Children { get; set; }
-
-        /// <summary>
-        /// Use this to copy one node (unsafe copy!)
-        /// </summary>
-        /// <returns></returns>
-        [DebuggerStepThrough]
-        internal Entity Copy() => this.__copy();
-
-        /// <summary>
-        /// Use this to copy an entity. Recommended to use if you need a safe copy
-        /// </summary>
-        /// <returns></returns>
-        [DebuggerStepThrough]
-        public Entity DeepCopy()
-        {
-            Entity res = Copy();
-            foreach (var child in Children)
-            {
-                res.AddChild(child.DeepCopy());
-            }
-            return res;
-        }
-        
         public static implicit operator Entity(int num)           => new NumberEntity(num);
         public static implicit operator Entity(long num)          => new NumberEntity(num);
         public static implicit operator Entity(ComplexNumber num) => new NumberEntity(num);
@@ -93,59 +49,9 @@ namespace AngouriMath
             if (a is null || b is null)
                 return false;
             // We expect the EqualsTo implementation to check if a's type is equal to b's type
-            return a.EqualsTo(b);
+            return a.Equals(b);
         }
         public static bool operator !=(Entity? a, Entity? b) => !(a == b);
-        public override bool Equals(object obj) => obj is Entity e && EqualsTo(e);
-        bool System.IEquatable<Entity>.Equals(Entity other) => EqualsTo(other);
-
-        
-        internal List<Entity> ChildrenReadonly => Children;
-
-        public int ChildrenCount => Children.Count;
-
-        internal void PropsReinit()
-        {
-            properties = null; // will be reinitted by the first addressing to Properties
-        }
-
-        public void SetChild(int index, Entity child)
-        {
-            Children[index] = child;
-            PropsReinit();
-        }
-
-        public Entity GetChild(int index)
-            => Children[index];
-
-
-        public void AddChildrenRange(IEnumerable<Entity> children)
-        {
-            Children.AddRange(children);
-            PropsReinit();
-        }
-
-        public void AddChild(Entity child)
-        {
-            Children.Add(child);
-            PropsReinit();
-        }
-
-        private EntityProperties? properties;
-        internal EntityProperties Properties
-        {
-            get
-            {
-                if (properties is null)
-                    properties = new EntityProperties(this);
-                return properties;
-            }
-        }
-
-        public override int GetHashCode()
-        {
-            return Name.GetHashCode() + Properties.GetPropHashCode();
-        }
 
         public bool IsFinite()
         {
@@ -169,13 +75,13 @@ namespace AngouriMath
         public NumberEntity(ComplexNumber value) : base(value.ToString())
         {
             if (value is RationalNumber and not IntegerNumber)
-                Priority = Const.PRIOR_DIV;
+                Priority = Const.Priority.Div;
             else if (!value.Real.Value.IsZero && !value.Imaginary.Value.IsZero)
-                Priority = Const.PRIOR_SUM;
+                Priority = Const.Priority.Sum;
             else if (value.Real < 0 || value.Imaginary < 0)
-                Priority = Const.PRIOR_MUL;
+                Priority = Const.Priority.Mul;
             else
-                Priority = Const.PRIOR_NUM;
+                Priority = Const.Priority.Num;
             Value = value;
         }
 
@@ -216,7 +122,7 @@ namespace AngouriMath
     /// </summary>
     public partial class VariableEntity : Entity
     {
-        public VariableEntity(string name) : base(name) => Priority = Const.PRIOR_VAR;
+        public VariableEntity(string name) : base(name) => Priority = Const.Priority.Var;
         public static implicit operator VariableEntity(string name) => new VariableEntity(name);
         protected override Entity __copy()
         {
@@ -243,7 +149,7 @@ namespace AngouriMath
     /// </summary>
     public partial class FunctionEntity : Entity
     {
-        public FunctionEntity(string name) : base(name) => Priority = Const.PRIOR_FUNC;
+        public FunctionEntity(string name) : base(name) => Priority = Const.Priority.Func;
         protected override Entity __copy()
         {
             return new FunctionEntity(Name);

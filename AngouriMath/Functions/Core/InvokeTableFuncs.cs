@@ -301,7 +301,7 @@ namespace AngouriMath
         }
     }
 
-    public abstract partial class Entity : ILatexiseable
+    public abstract partial record Entity : ILatexiseable
     {
         public int Priority { get; internal set; }
         public static Entity operator +(Entity a, Entity b) => Sumf.Hang(a, b);

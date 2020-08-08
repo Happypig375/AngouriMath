@@ -156,7 +156,7 @@ namespace AngouriMath.Functions.Algebra.AnalyticalSolving
                 newTerms.Add(invertDenominator * num);
             }
 
-            return TreeAnalyzer.MultiHangBinary(newTerms, "sumf", Const.PRIOR_SUM).InnerSimplify();
+            return TreeAnalyzer.MultiHangBinary(newTerms, "sumf", Const.Priority.Sum).InnerSimplify();
         }
     }
 }

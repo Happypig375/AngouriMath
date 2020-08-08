@@ -22,7 +22,7 @@ using System.Collections.Generic;
 
 namespace AngouriMath
 {
-    public abstract partial class Entity : ILatexiseable
+    public abstract partial record Entity : ILatexiseable
     {
         /// <summary>
         /// Static hash. It won't recount automatically, to recount it call
